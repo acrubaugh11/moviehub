@@ -9,6 +9,14 @@ export default function Home(){
                 <h1>
                     MovieHub
                 </h1>
+                <button>
+                    Explore
+                </button>
+                <div>
+                    Login 
+                    Signup
+                </div>
+                
             </div>
         </div>
     )

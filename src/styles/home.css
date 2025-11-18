@@ -6,8 +6,25 @@
 
 #home-content{
     position: relative;
+    height: 100vh;
+    width: 100vw;
     z-index: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid black;
 
+
+}
+
+#home-content > *{
+    flex: 1;
+    max-width: 100%;
+}
+
+h1{
+    height: 100vh;
+    margin: auto auto;
 }
 
 img {

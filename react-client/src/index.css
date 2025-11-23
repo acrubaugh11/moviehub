@@ -1,0 +1,40 @@
+:root {
+  font-family: "Noto Serif Display", serif; 
+  color: rgba(240, 211, 131, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  width: 100%;
+  background: linear-gradient(to bottom right, #000000, rgb(117, 106, 83));
+
+}
+
+a, button {
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  color: rgba(240, 211, 131, 0.87);
+  border: 1px solid white;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+}
+
+a:hover, button:hover {
+  cursor: pointer;
+  filter: drop-shadow(0 0 2rem rgba(255, 255, 255, 0.1));
+
+
+}

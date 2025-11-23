@@ -1,0 +1,131 @@
+#home-page{
+    height: 100vh;
+    width: 100vw;
+}
+
+#home-content{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+
+
+}
+
+.foreground {
+    z-index: 1;
+}
+
+#home-content > *{
+    flex: 1;
+    max-width: 100%;
+}
+
+#left-side{
+    align-items: center;
+    margin-top: 20vh;
+    margin-left: 50px;
+    z-index: 1;
+}
+
+
+
+#title {
+    display: flex;
+    align-items: center;    
+        
+  }
+  
+
+
+h1{
+    font-size: 7rem;
+    font-weight: 100;
+}
+
+.bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    object-fit: fill;
+    z-index: 0 !important;
+    filter: brightness(55%);
+}
+
+.logo {
+    height: 80px;
+    width: 80px;
+}
+
+
+
+#middle {
+    width: 100%;
+    margin-top: 100px;
+    align-self: flex-end;
+    margin-bottom: 10rem;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+}
+
+
+#right-side {
+    display: flex;
+    margin: 10px;
+    gap: 20px;
+    scale: 0.8;
+}
+
+
+#login, #explore-movies {
+    width: 20vw;
+}
+
+#my-movies {
+    margin-left: 10vw;
+    margin-top: 10vh;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 40vw;
+    height: 60vh;
+    margin: 50px auto auto auto;
+    border-radius: 25px;
+    background-color: black;
+    align-items: left ;
+}
+
+form h2{
+    width: auto;
+    text-align: center;
+    margin: 0;
+    border-radius: 25px;
+    padding: 10px;
+    border: 1px solid white;
+}
+
+form input, h4 {
+    border-radius: 25px;
+    height: 20px;
+    width: 80%;
+    margin: auto;
+}
+
+.cancel-submit {
+    display: flex;
+    justify-content:space-evenly;
+
+}
+
+.cancel-submit button {
+    width: 100%;
+    margin: 30px;
+}

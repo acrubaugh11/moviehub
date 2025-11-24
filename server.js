@@ -8,7 +8,6 @@ const session = require("express-session");
 const passport = require("passport");
 require('./auth/passport'); 
 
-app.use(multer().none());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
@@ -31,6 +30,8 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/uploads", express.static("uploads"));
+
 
 
 const authRoutes = require("./auth/authRoute");

@@ -17,7 +17,25 @@ async function createNewPlaylist(userId, name, description, image_url){
     return result.rows[0];
 }
 
+async function getPlaylistById(playlistId) {
+    const result = await pool.query(
+        'SELECT * FROM playlists WHERE id = $1',
+        [playlistId]
+    );
+    return result.rows[0];
+}
+
+async function deletePlaylist(playlistId){
+    const result = await pool.query(
+        'DELETE FROM playlists WHERE id = $1 RETURNING *',
+        [playlistId]
+    );
+    return result.rows[0];
+}
+
 module.exports = {
     getMyPlaylists,
-    createNewPlaylist
+    createNewPlaylist,
+    getPlaylistById,
+    deletePlaylist
 };

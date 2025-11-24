@@ -15,7 +15,9 @@ body {
   display: flex;
   place-items: center;
   width: 100%;
-  background: linear-gradient(to bottom right, #000000, rgb(117, 106, 83));
+  /* background: linear-gradient(to bottom right, #000000, rgb(117, 106, 83)); */
+  background-color:  rgb(35, 31, 20);
+
 
 }
 
@@ -23,7 +25,7 @@ a, button {
   background-color: transparent;
   backdrop-filter: blur(10px);
   color: rgba(240, 211, 131, 0.87);
-  border: 1px solid white;
+  border: 1px solid white !important;
   border-radius: 20px;
   font-weight: 600;
   font-size: 1rem;
@@ -38,3 +40,4 @@ a:hover, button:hover {
 
 
 }
+

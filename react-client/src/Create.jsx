@@ -7,7 +7,7 @@ export default function Create(){
     const BACKEND_URL = import.meta.env.VITE_BACKEND_API_BASE_URL || 'http://localhost:3000';
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [image, setImage] = useState('');
+    const [image_url, setImage_url] = useState(null);
     const navigate = useNavigate();
 
     
@@ -16,8 +16,10 @@ export default function Create(){
       const formData = new FormData();
       formData.append('name', name);
       formData.append('description', description);
-      formData.append('image_url', image);
-    
+      if(image_url){
+        formData.append('image_url', image_url);
+      }
+
       try {
         const response = await axios.post(`${BACKEND_URL}/playlists/create`, formData, {
           withCredentials: true,
@@ -26,6 +28,7 @@ export default function Create(){
           }
         });
         console.log('Playlist created:', response.data);
+        alert("New playlist Created!!");
         navigate('/dashboard');
       } catch (err) {
         console.error('Error creating playlist:', err);
@@ -44,7 +47,7 @@ export default function Create(){
                 <input type="text" name="description" value={description} onChange={(e) => setDescription(e.target.value)}
                 />
                 <h4>Image</h4>
-                <input type="file" name="image_url" value={image} onChange={(e) => setImage(e.target.files[0])}
+                <input type="file" name="image_url" onChange={(e) => setImage_url(e.target.files[0])}
                 />
 
                 <div className="cancel-submit">

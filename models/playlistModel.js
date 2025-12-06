@@ -33,9 +33,68 @@ async function deletePlaylist(playlistId){
     return result.rows[0];
 }
 
+async function getPlaylistMovies(playlistId) {
+    const result = await pool.query (
+        `SELECT * FROM playlist_movies WHERE playlistId = $1 `, [playlistId]
+    );
+    return result.rows;
+}
+
+async function addToPlaylist(playlistId, movieId) {
+    try {
+        const checkFirst = await pool.query(
+            `SELECT * FROM playlist_movies 
+             WHERE playlistId = $1 AND movieId = $2`,
+            [playlistId, movieId]
+        );
+
+        if (checkFirst.rows.length > 0) {
+            return { success: false, message: "Movie already exists in playlist" };
+        }
+
+        const result = await pool.query(
+            `INSERT INTO playlist_movies (playlistId, movieId)
+             VALUES ($1, $2)`,
+            [playlistId, movieId]
+        );
+
+        return { success: true, message: "Movie added to playlist" };
+
+    } catch (err) {
+        console.error(err);
+        throw new Error("Error adding movie to playlist");
+    }
+}
+
+async function removeFromPlaylist(playlistId, movieId) {
+    try {
+      const result = await pool.query(
+        `DELETE FROM playlist_movies 
+         WHERE playlistId = $1 AND movieId = $2
+         RETURNING *`,
+        [playlistId, movieId]
+      );
+  
+      if (result.rowCount === 0) {
+        return { success: false, message: "No movies in playlist" };
+      }
+  
+      return { success: true, message: "Movie removed from playlist" };
+    } catch (err) {
+      console.error(err);
+      throw new Error("Error removing movie from playlist");
+    }
+  }
+  
+
+
+
 module.exports = {
     getMyPlaylists,
     createNewPlaylist,
     getPlaylistById,
-    deletePlaylist
+    deletePlaylist,
+    addToPlaylist,
+    getPlaylistMovies,
+    removeFromPlaylist
 };

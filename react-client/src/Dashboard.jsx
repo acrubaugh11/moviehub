@@ -16,7 +16,6 @@ export default function Dashboard() {
     try {
       let movies = await axios.get("/movies/myMovies");
       movies = JSON.stringify(movies.data);
-      console.log(movies);
     } catch (err) {
       console.error(err);
     }
@@ -29,9 +28,6 @@ export default function Dashboard() {
       });
       const playlists = response.data;
       setPlaylistList(playlists);
-      for (const playlist of playlists) {
-        console.log(playlist);
-      }
     } catch (err) {
       console.error(err);
     }
@@ -56,7 +52,7 @@ export default function Dashboard() {
         {playlistList.map((playlist) => (
           <div key={playlist.id} className="playlist-card" onClick={() => openPlaylist(playlist.id)}>
             <img src={playlist.image_url !== '' ? `${BACKEND_URL}${playlist.image_url}` : musichub} alt='error' />
-            <h3>{playlist.name}</h3> 
+            <h3><strong>{playlist.name}</strong></h3> 
             <p>{playlist.description}</p>
           </div>
         ))}

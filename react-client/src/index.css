@@ -10,11 +10,12 @@
 }
 
 
-body {
+body, html {
   margin: 0;
   display: flex;
   place-items: center;
   width: 100%;
+  min-height: 100%;
   /* background: linear-gradient(to bottom right, #000000, rgb(117, 106, 83)); */
   background-color:  rgb(35, 31, 20);
 

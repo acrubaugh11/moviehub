@@ -47,33 +47,12 @@ const createPlaylistsTable = async () => {
     }
 };
 
-const createMoviesTable = async () => {
-    const createMoviesQuery = `
-        CREATE TABLE IF NOT EXISTS movies (
-            id SERIAL PRIMARY KEY,
-            tmdbId INT UNIQUE NOT NULL,
-            title VARCHAR(255) NOT NULL,
-            release_year INT,
-            poster_url TEXT,
-            overview TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-
-    `;
-    try {
-        await pool.query(createMoviesQuery);
-        console.log("Movies table created or already exists");
-    } catch (error) {
-        console.error("Error creating movies table:", error);
-    }
-};
-
 
 const createPlaylistMoviesTable = async () => {
     const createPlaylistMoviesQuery = `
         CREATE TABLE IF NOT EXISTS playlist_movies (
             playlistId INT NOT NULL REFERENCES playlists(id) ON DELETE CASCADE,
-            movieId INT NOT NULL REFERENCES movies(id) ON DELETE CASCADE,
+            movieId INT NOT NULL,
             added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (playlistId, movieId)
     );
@@ -93,7 +72,6 @@ const startDB = async () =>{
     try{
         await createUsersTable();
         await createPlaylistsTable();  
-        await createMoviesTable(); 
         await createPlaylistMoviesTable();
         console.log("All tables created successfully!");
     }catch(err){

@@ -11,6 +11,7 @@ import ProtectedLayout from './components/auth/ProtectedLayout.jsx'
 import { AuthProvider } from './components/auth/AuthContext.jsx';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PlaylistItem from './components/PlaylistItem.jsx'
+import MovieItem from './components/MovieItem.jsx'
 
 
 function App() {
@@ -26,7 +27,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/create" element={<Create />} />
-            <Route path='/playlists/:id' element={<PlaylistItem />}></Route>
+            <Route path='/playlists/:id' element={<PlaylistItem />}/>
+            <Route path='/movies/:id' element={<MovieItem/>}/>
           </Route>
         </Routes>
       </Router>

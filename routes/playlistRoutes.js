@@ -4,8 +4,16 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 router.get("/myPlaylists", controller.fetchMyPlaylists);
+router.post("/addMovie/:playlistId/:movieId", controller.addMovieToPlaylist);
+
+router.get("/playlistMovies/:playlistId", controller.fetchPlaylistMoviesID);
+
+
+
 
 router.get("/:id", controller.fetchPlaylistById);
+router.get("/:id/movies", controller.getMovies);
+router.delete("/:playlistId/movies/:movieId", controller.removeMovies);
 router.delete("/:id", controller.deleteMyPlaylist);
 
 const storage = multer.diskStorage({

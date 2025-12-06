@@ -39,6 +39,7 @@ app.use("/auth", authRoutes);
 
 const movieRoutes = require("./routes/myMovieRoutes");
 app.use("/movies", movieRoutes);
+app.use("/api", movieRoutes);
 
 const playlistRoutes = require("./routes/playlistRoutes.js");
 app.use("/playlists", playlistRoutes)

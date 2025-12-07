@@ -17,6 +17,15 @@ app.use(express.static("public"));
 
 
 app.use(
+  cors({
+    origin: 'https://moviehub-1-d78y.onrender.com',
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
+
+
+app.use(
   session({
     secret: process.env.SECRET_KEY,
     resave: false,
@@ -25,20 +34,12 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: true, 
-      sameSite: 'none', 
+      sameSite: "none", 
       maxAge: 1000 * 60 * 60 * 24,
-      domain: 'https://moviehub-1-d78y.onrender.com', 
     }
   })
 );
 
-app.use(
-  cors({
-    origin: 'https://moviehub-1-d78y.onrender.com',
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true,
-  })
-);
 
 
 app.use(passport.initialize());

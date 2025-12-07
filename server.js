@@ -14,7 +14,7 @@ app.use(express.static("public"));
 
 app.use(
   cors({
-    origin: process.env.CLIENT_BASE_URL || "http://localhost:5173",
+    origin: process.env.CLIENT_BASE_URL,
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -24,7 +24,13 @@ app.use(
   session({
     secret: process.env.SECRET_KEY,
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false,
+    cookie:{
+      secure: true,
+      sameSite: 'none',
+      maxAge: 24*60*60*1000
+
+    }
   })
 );
 

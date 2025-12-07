@@ -43,6 +43,8 @@ router.get("/google/callback", (req, res, next) => {
         console.error("Login error:", err);
         return res.redirect(`${CLIENT_BASE_URL}/login`);
       }
+      console.log("req.user after logIn:", req.user);
+
 
       req.session.save((err) => {
         if (err) console.error("Session save error:", err);

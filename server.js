@@ -6,7 +6,6 @@ const multer = require("multer");
 const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
-const pgSession = require("connect-pg-simple")(session);
 
 require('./auth/passport'); 
 
@@ -30,9 +29,6 @@ app.use(
 
 app.use(
   session({
-    store: new pgSession({
-      conString: process.env.DATABASE_URL,
-    }),
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,

@@ -44,7 +44,7 @@ router.get(
 router.get('/me', async (req, res) => {
 
   if (req.isAuthenticated()) {
-    const user = await userModel.getUserByGoogleId(req.user.googleid);
+    const user = await userModel.getUserByGoogleId(req.user.googleId);
     if (user) {
       res.json(user);
     } else {

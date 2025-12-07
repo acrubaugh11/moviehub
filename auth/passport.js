@@ -19,7 +19,7 @@ passport.use(new GoogleStrategy({
   }
   const user = await userModel.getUserByGoogleId(profile.id);
   if (!user) {
-    user = await userModel.createNewUser(Object.values(newUser));
+    user = await userModel.createNewUser(newUser);
   }
   return done(null, user);
 }));

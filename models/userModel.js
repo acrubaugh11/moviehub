@@ -10,12 +10,17 @@ async function getUserByGoogleId(googleId) {
   return result.rows[0];
 }
 
-async function createNewUser([googleId, displayName, firstName, lastName, email]) {
-    let queryText = "INSERT INTO users ( googleId, displayName, firstName, lastName, email) VALUES ($1, $2, $3, $4, $5) RETURNING *";
-    let values = [googleId, displayName, firstName, lastName, email];
-    const result = await pool.query(queryText, values);
-    return result.rows[0];
+async function createNewUser({ googleId, displayName, firstName, lastName, email }) {
+  const queryText = `
+    INSERT INTO users (googleId, displayName, firstName, lastName, email)
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *
+  `;
+  const values = [googleId, displayName, firstName, lastName, email];
+  const result = await pool.query(queryText, values);
+  return result.rows[0];
 }
+
 module.exports = {
   getUserByGoogleId,
   createNewUser

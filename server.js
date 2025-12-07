@@ -7,6 +7,8 @@ const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
 const pgSession = require("connect-pg-simple")(session);
+const isProd = process.env.NODE_ENV === 'production';
+
 
 require('./auth/passport'); 
 
@@ -16,7 +18,9 @@ app.use(express.static("public"));
 
 app.use(
   cors({
-    origin: process.env.CLIENT_BASE_URL,
+    origin: isProd
+    ? 'https://moviehub-llh9.vercel.app' 
+    : 'http://localhost:5173',        
     methods: ['GET','POST','PUT','DELETE','OPTIONS'],
     credentials: true,
   })
@@ -29,9 +33,9 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: isProd,
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: isProd ? 'none' : 'lax',
     },
   })
 );

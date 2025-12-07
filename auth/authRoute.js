@@ -60,7 +60,6 @@ router.post('/logout', (req, res) => {
     if (err) {
       return res.status(500).json({ message: 'Error logging out' });
     }
-    // Destroy the session to clear the session cookie
     req.session.destroy((sessionErr) => {
       if (sessionErr) {
         return res.status(500).json({ message: 'Error destroying session' });

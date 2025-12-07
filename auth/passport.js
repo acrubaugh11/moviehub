@@ -11,7 +11,7 @@ passport.use(new GoogleStrategy({
 }, async (token, tokenSecret, profile, done) => {
 
   const newUser = {
-    googleId: profile.id,
+    googleid: profile.id,
     displayName: profile.displayName,
     firstName: profile.name.givenName,
     lastName: profile.name.familyName,
@@ -28,8 +28,8 @@ passport.use(new GoogleStrategy({
 
 
 passport.serializeUser((user, done) => {
-  console.log(`from serialise -> userId: ${user.googleId}`)
-  done(null, user.googleId);
+  console.log(`from serialise -> userId: ${user.googleid}`)
+  done(null, user.googlid);
 });
 
 passport.deserializeUser(async (id, done) => {

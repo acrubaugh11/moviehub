@@ -18,20 +18,24 @@ passport.use(new GoogleStrategy({
     email: profile.emails[0].value
   }
   const user = await userModel.getUserByGoogleId(profile.id);
+  console.log(user);
   if (!user) {
     user = await userModel.createNewUser(Object.values(newUser));
+    console.log(user);
   }
   return done(null, profile);
 }));
 
 
 passport.serializeUser((user, done) => {
+  console.log(`from serialise -> userId: ${user.id}`)
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await userModel.getUserByGoogleId(id); // Fetch from DB
+    console.log(`from deserialize -> user: ${user}`)
     done(null, user); // Pass the full user object
   } catch (error) {
     done(error);

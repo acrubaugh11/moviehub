@@ -3,7 +3,7 @@ const passport = require("passport");
 const router = express.Router();
 const userModel = require("../models/userModel");
 
-const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL || 'http://localhost:5173';
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL;
 
 const saveReturnTo = (req, res, next) => {
   const returnTo = req.query.returnTo || '/';
@@ -35,6 +35,7 @@ router.get(
     // 'req.returnTo' was saved in the session by our 'saveReturnTo' middleware
     const returnTo = req.session.returnTo || '/dashboard';
     delete req.session.returnTo; // Clean up the session
+    console.log(`from get /google/callback returning to : ${returnTo}`)
 
     // Redirect the user back to the frontend
     res.redirect(`${CLIENT_BASE_URL}${returnTo}`);
@@ -45,13 +46,16 @@ router.get('/me', async (req, res) => {
 
   if (req.isAuthenticated()) {
     const user = await userModel.getUserByGoogleId(req.user.googleId);
+    console.log(`user in .get/me is ${user}`);
     if (user) {
+      console.log(`returning user!`);
       res.json(user);
     } else {
       res.status(404).json({ message: 'User not found' });
     }
   } else {
     res.status(401).json({ message: 'Not authenticated' });
+    console.log(`req was not authenticated with req = ${req}`);
   }
 });
 

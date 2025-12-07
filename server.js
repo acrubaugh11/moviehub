@@ -18,13 +18,13 @@ app.set("trust proxy", 1);
 app.use(
   cors({
     origin: [
-      process.env.FRONTEND_URL,     
-      "http://localhost:5173"     
+      "https://moviehub-1-d78y.onrender.com",
     ],
     credentials: true,
-    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
   })
 );
+
 
 app.use(
   session({

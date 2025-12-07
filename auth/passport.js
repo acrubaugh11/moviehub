@@ -8,9 +8,9 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejec
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.SERVER_BASE_URL}/auth/google/callback`,
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.SECRET_KEY,
+      callbackURL: `${process.env.VITE_BACKEND_API_BASE_URL}/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {

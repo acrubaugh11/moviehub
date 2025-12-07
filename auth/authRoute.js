@@ -28,18 +28,27 @@ router.get(
   passport.authenticate("google", {
     keepSessionInfo: true,
     failureRedirect: `${CLIENT_BASE_URL}/login?error=true`, // Redirect to login on failure
-    
+
   }),
   (req, res) => {
-    // === SUCCESSFUL AUTHENTICATION ===
-    // 'req.returnTo' was saved in the session by our 'saveReturnTo' middleware
     const returnTo = req.session.returnTo || '/dashboard';
-    delete req.session.returnTo; // Clean up the session
-    console.log(`from get /google/callback returning to : ${returnTo}`)
-
-    // Redirect the user back to the frontend
-    res.redirect(`${CLIENT_BASE_URL}${returnTo}`);
+    delete req.session.returnTo;
+    console.log(`from get /google/callback returning to : ${returnTo}`);
+  
+    req.logIn(user, (err) => {
+      if (err) {
+        console.error("Login error:", err);
+        return res.redirect('/login');
+      }
+  
+      req.session.save((err) => {
+        if (err) console.error("Session save error:", err);
+  
+        res.redirect(`${CLIENT_BASE_URL}${returnTo}`);
+      });
+    });
   }
+  
 );
 
 router.get('/me', async (req, res) => {

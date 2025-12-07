@@ -26,9 +26,9 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    scope: ['profile', 'email'],
     keepSessionInfo: true,
     failureRedirect: `${CLIENT_BASE_URL}/login?error=true`, // Redirect to login on failure
+    
   }),
   (req, res) => {
     // === SUCCESSFUL AUTHENTICATION ===

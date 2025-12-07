@@ -41,11 +41,7 @@ router.get(
   }
 );
 
-router.get('/me',   passport.authenticate("google", {
-  scope: ['profile', 'email'],
-  keepSessionInfo: true,
-  failureRedirect: `${CLIENT_BASE_URL}/login?error=true`, // Redirect to login on failure
-}), async (req, res) => {
+router.get('/me', async (req, res) => {
   if (req.isAuthenticated()) {
     const user = await userModel.getUserByGoogleId(req.user.googleId);
     if (user) {

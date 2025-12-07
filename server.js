@@ -6,6 +6,8 @@ const multer = require("multer");
 const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
+const pgSession = require("connect-pg-simple")(session);
+
 require('./auth/passport'); 
 
 app.use(express.urlencoded({ extended: true }));
@@ -15,16 +17,21 @@ app.use(express.static("public"));
 app.use(
   cors({
     origin: process.env.CLIENT_BASE_URL,
-    methods: "GET,POST,PUT,DELETE",
+    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
     credentials: true,
   })
 );
 
 app.use(
   session({
+    store: new pgSession({ conObject: { connectionString: process.env.DATABASE_URL } }),
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: true,
+      sameSite: 'none',
+    },
   })
 );
 

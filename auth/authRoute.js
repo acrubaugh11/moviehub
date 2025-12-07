@@ -23,33 +23,36 @@ router.get(
   })
 );
 
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    keepSessionInfo: true,
-    failureRedirect: `${CLIENT_BASE_URL}/login?error=true`, // Redirect to login on failure
+router.get("/google/callback", (req, res, next) => {
+  passport.authenticate("google", { keepSessionInfo: true }, (err, user, info) => {
+    if (err) {
+      console.error("Passport authenticate error:", err);
+      return res.redirect(`${CLIENT_BASE_URL}/login?error=true`);
+    }
 
-  }),
-  (req, res) => {
+    if (!user) {
+      console.error("No user returned from Google strategy");
+      return res.redirect(`${CLIENT_BASE_URL}/login?error=true`);
+    }
+
     const returnTo = req.session.returnTo || '/dashboard';
     delete req.session.returnTo;
-    console.log(`from get /google/callback returning to : ${returnTo}`);
-  
+
     req.logIn(user, (err) => {
       if (err) {
         console.error("Login error:", err);
-        return res.redirect('/login');
+        return res.redirect(`${CLIENT_BASE_URL}/login`);
       }
-  
+
       req.session.save((err) => {
         if (err) console.error("Session save error:", err);
-  
+
         res.redirect(`${CLIENT_BASE_URL}${returnTo}`);
       });
     });
-  }
-  
-);
+  })(req, res, next);
+});
+
 
 router.get('/me', async (req, res) => {
 

@@ -33,7 +33,7 @@ router.get(
   (req, res) => {
     // === SUCCESSFUL AUTHENTICATION ===
     // 'req.returnTo' was saved in the session by our 'saveReturnTo' middleware
-    const returnTo = req.session.returnTo || '/dashboard';
+    const returnTo = '/dashboard';
     delete req.session.returnTo; // Clean up the session
 
     // Redirect the user back to the frontend

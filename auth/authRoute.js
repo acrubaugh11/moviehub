@@ -15,32 +15,34 @@ router.get(
   "/google",
   saveReturnTo,
   passport.authenticate("google", {
-    scope: ["profile", "email"],
+    keepSessionInfo: true,
+    scope: [
+        "https://www.googleapis.com/auth/plus.login",
+        "https://www.googleapis.com/auth/userinfo.email",
+      ],
   })
 );
-
 
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: `${CLIENT_BASE_URL}/login?error=true`,
+    scope: ['profile', 'email'],
     keepSessionInfo: true,
+    failureRedirect: `${CLIENT_BASE_URL}/login?error=true`, // Redirect to login on failure
   }),
   (req, res) => {
+    // === SUCCESSFUL AUTHENTICATION ===
+    // 'req.returnTo' was saved in the session by our 'saveReturnTo' middleware
+    const returnTo = req.session.returnTo || '/dashboard';
+    delete req.session.returnTo; // Clean up the session
 
-    console.log("google callback started");
-    console.log("Authenticated User:", req.user);
-
-    const returnTo = req.session.returnTo || "/dashboard";
-
-    delete req.session.returnTo;
-
+    // Redirect the user back to the frontend
     res.redirect(`${CLIENT_BASE_URL}${returnTo}`);
   }
 );
 
-
 router.get('/me', async (req, res) => {
+
   if (req.isAuthenticated()) {
     const user = await userModel.getUserByGoogleId(req.user.googleId);
     if (user) {
@@ -58,6 +60,7 @@ router.post('/logout', (req, res) => {
     if (err) {
       return res.status(500).json({ message: 'Error logging out' });
     }
+    // Destroy the session to clear the session cookie
     req.session.destroy((sessionErr) => {
       if (sessionErr) {
         return res.status(500).json({ message: 'Error destroying session' });

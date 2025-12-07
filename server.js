@@ -2,34 +2,29 @@
 require('dotenv').config();
 const express = require("express");
 const app = express();
-const multer = require("multer");
 const cors = require("cors");
-
-
-
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 const passport = require("passport");
 
-require('./auth/passport'); 
-
+require('./auth/passport');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.set('trust proxy', 1);
-
-
+app.set("trust proxy", 1);
 
 app.use(
   cors({
-    origin: 'https://moviehub-1-d78y.onrender.com',
-    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+    origin: [
+      process.env.FRONTEND_URL,     
+      "http://localhost:5173"     
+    ],
     credentials: true,
+    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
   })
 );
-
 
 app.use(
   session({
@@ -40,12 +35,13 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, 
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "none",
+      maxAge: 30 * 24 * 60 * 60 * 1000 
     }
   })
 );
-
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -56,30 +52,17 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/auth", require("./auth/authRoute"));
+app.use("/movies", require("./routes/myMovieRoutes"));
+app.use("/api", require("./routes/myMovieRoutes"));
+app.use("/playlists", require("./routes/playlistRoutes.js"));
 
+app.use("/uploads", express.static("uploads"));
 
 app.use((req, res, next) => {
   if (req.method === "OPTIONS") return res.sendStatus(204);
   next();
 });
 
-app.use("/uploads", express.static("uploads"));
-
-
-
-const authRoutes = require("./auth/authRoute");
-app.use("/auth", authRoutes);
-
-const movieRoutes = require("./routes/myMovieRoutes");
-app.use("/movies", movieRoutes);
-app.use("/api", movieRoutes);
-
-const playlistRoutes = require("./routes/playlistRoutes.js");
-app.use("/playlists", playlistRoutes)
-
-
-
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, function () {
-  console.log("Server listening on port: " + PORT + "!");
-});
+app.listen(PORT, () => console.log("Server listening on port " + PORT));

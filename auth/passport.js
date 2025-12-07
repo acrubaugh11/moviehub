@@ -17,7 +17,7 @@ passport.use(new GoogleStrategy({
     lastName: profile.name.familyName,
     email: profile.emails[0].value
   }
-  const user = await userModel.getUserByGoogleId(profile.id);
+  let user = await userModel.getUserByGoogleId(profile.id);
   console.log(user);
   if (!user) {
     user = await userModel.createNewUser(Object.values(newUser));

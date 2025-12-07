@@ -8,6 +8,9 @@ const session = require("express-session");
 const passport = require("passport");
 require('./auth/passport'); 
 
+app.set('trust proxy', 1);
+
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
@@ -22,14 +25,17 @@ app.use(
 
 app.use(
   session({
+    name: 'connect.sid',
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
-    cookie:{
+    proxy: true,
+    cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 1000 * 60 * 60 * 24,
+      domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
     },
   })
 );

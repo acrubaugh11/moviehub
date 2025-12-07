@@ -7,8 +7,9 @@ const userModel = require('../models/userModel');
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.SECRET_KEY,
-  callbackURL: `${process.env.VITE_BACKEND_API_BASE_URL}/auth/google/callback`
-}, async (token, tokenSecret, profile, done) => {
+  callbackURL: `${process.env.VITE_BACKEND_API_BASE_URL}/auth/google/callback`,
+  proxy: true
+}, async (accessToken, refreshToken, profile, done) => {
 
   const newUser = {
     googleId: profile.id,
@@ -26,14 +27,24 @@ passport.use(new GoogleStrategy({
 
 
 passport.serializeUser((user, done) => {
+  console.log('Serializing user:', user.id);
   done(null, user.id);
 });
-
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await userModel.getUserByGoogleId(id);
+    console.log('Deserializing user ID:', id);
+    let user = await userModel.getUserById(id);
+    if (!user) {
+      user = await userModel.getUserByGoogleId(id);
+    }
+    if (!user) {
+      console.log('User not found for ID:', id);
+      return done(null, false);
+    }
+    console.log('User deserialized successfully:', user.id);
     done(null, user);
   } catch (error) {
-    done(error);
+    console.error('Deserialize error:', error);
+    done(error, null);
   }
 });

@@ -23,12 +23,12 @@ passport.use(new GoogleStrategy({
     user = await userModel.createNewUser(Object.values(newUser));
     console.log(user);
   }
-  return done(null, profile);
+  return done(null, user);
 }));
 
 
 passport.serializeUser((user, done) => {
-  console.log(`from serialise -> userId: ${user.googleid}`)
+  console.log(`from serialise -> userId: ${user}`)
   done(null, user.googlid);
 });
 

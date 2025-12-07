@@ -1,43 +1,51 @@
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const { Pool } = require("pg");
 require('dotenv').config();
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-const userModel = require('../models/userModel');
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
-passport.use(new GoogleStrategy({
-  clientID: process.env.CLIENT_ID,
-  clientSecret: process.env.SECRET_KEY,
-  callbackURL: `${process.env.VITE_BACKEND_API_BASE_URL}/auth/google/callback`
-}, async (token, tokenSecret, profile, done) => {
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: `${process.env.SERVER_BASE_URL}/auth/google/callback`,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        const googleid = profile.id;
+        const displayname = profile.displayName;
+        const email = profile.emails[0].value;
+        const firstname = profile.name.givenName;
+        const lastname = profile.name.familyName;
 
-  const newUser = {
-    googleid: profile.id,
-    displayName: profile.displayName,
-    firstName: profile.name.givenName,
-    lastName: profile.name.familyName,
-    email: profile.emails[0].value
-  }
-  let user = await userModel.getUserByGoogleId(profile.id);
-  console.log(user);
-  if (!user) {
-    user = await userModel.createNewUser(Object.values(newUser));
-    console.log(user);
-  }
-  return done(null, user);
-}));
+        let res = await pool.query("SELECT * FROM users WHERE googleid=$1", [googleid]);
 
+        if (!res.rows.length) {
+          res = await pool.query(
+            "INSERT INTO users (googleid, displayname, firstname, lastname, email) VALUES ($1,$2,$3,$4,$5) RETURNING *",
+            [googleid, displayname, firstname, lastname, email]
+          );
+        }
+
+        done(null, res.rows[0]);
+      } catch (err) {
+        done(err);
+      }
+    }
+  )
+);
 
 passport.serializeUser((user, done) => {
-  console.log(`from serialise -> userId: ${user.googleid}`)
   done(null, user.googleid);
 });
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (googleid, done) => {
   try {
-    const user = await userModel.getUserByGoogleId(id); // Fetch from DB
-    console.log(`from deserialize -> user: ${user}`)
-    done(null, user); // Pass the full user object
-  } catch (error) {
-    done(error);
+    const res = await pool.query("SELECT * FROM users WHERE googleid=$1", [googleid]);
+    done(null, res.rows[0] || null);
+  } catch (err) {
+    done(err);
   }
 });

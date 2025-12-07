@@ -49,7 +49,10 @@ router.get("/google/callback", (req, res, next) => {
 
 
 router.get('/me', async (req, res) => {
-  console.log(`the req user at /me = `, req.user, `\n the req session at /me = `, req.session, `\n the req body at /me = `, req.body);
+  console.log("req.session:", req.session);
+  console.log("req.session.passport:", req.session.passport);
+  console.log("req.user:", req.user);
+  console.log("req.cookies:", req.cookies);
   if (req.isAuthenticated()) {
     const user = await userModel.getUserByGoogleId(req.user.googleId);
     console.log(`user in .get/me is ${user}`);

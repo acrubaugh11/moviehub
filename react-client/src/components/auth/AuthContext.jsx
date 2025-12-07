@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
       try {
         // The /me endpoint will check the session cookie
         const { data } = await axios.get(`${BACKEND_URL}/auth/me`, {
-          withCredentials: true, // Include cookies in the request
+          withCredentials: true
         });
         console.log("User session data:", data);
         setUser(data); // User is logged in

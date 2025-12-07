@@ -32,11 +32,7 @@ app.use(
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      secure: isProd,
-      httpOnly: true,
-      sameSite: isProd ? 'none' : 'lax',
-    },
+    cookie: { secure: false, sameSite: 'lax', httpOnly: true },
   })
 );
 

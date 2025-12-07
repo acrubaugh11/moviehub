@@ -24,7 +24,7 @@ app.use(express.static("public"));
 app.use(
   cors({
     origin: 'https://moviehub-1-d78y.onrender.com',
-    methods: "GET,POST,PUT,DELETE",
+    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
     credentials: true,
   })
 );
@@ -53,6 +53,13 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+})
+
 app.use("/uploads", express.static("uploads"));
 
 

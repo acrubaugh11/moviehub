@@ -30,13 +30,13 @@ passport.serializeUser((user, done) => {
   console.log('Serializing user:', user.id);
   done(null, user.id);
 });
+
+
 passport.deserializeUser(async (id, done) => {
   try {
     console.log('Deserializing user ID:', id);
     let user = await userModel.getUserById(id);
-    if (!user) {
-      user = await userModel.getUserByGoogleId(id);
-    }
+
     if (!user) {
       console.log('User not found for ID:', id);
       return done(null, false);

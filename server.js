@@ -4,18 +4,21 @@ const express = require("express");
 const app = express();
 const multer = require("multer");
 const cors = require("cors");
+
+
+
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 const passport = require("passport");
 
 require('./auth/passport'); 
 
-app.set('trust proxy', 1);
-
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
+
+app.set('trust proxy', 1);
 
 
 
@@ -36,12 +39,8 @@ app.use(
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
-    proxy: true,
     cookie: {
-      httpOnly: true,
-      secure: true, 
-      sameSite: "none", 
-      maxAge: 1000 * 60 * 60 * 24,
+      secure: false, 
     }
   })
 );
@@ -50,6 +49,13 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+  console.log("SESSION:", req.session);
+  console.log("USER:", req.user);
+  next();
+});
+
 
 
 app.use((req, res, next) => {

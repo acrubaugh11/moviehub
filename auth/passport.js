@@ -28,8 +28,8 @@ passport.use(new GoogleStrategy({
 
 
 passport.serializeUser((user, done) => {
-  console.log(`from serialise -> userId: ${user.id}`)
-  done(null, user.id);
+  console.log(`from serialise -> userId: ${user.googleId}`)
+  done(null, user.googleId);
 });
 
 passport.deserializeUser(async (id, done) => {

@@ -29,7 +29,7 @@ passport.use(new GoogleStrategy({
 
 passport.serializeUser((user, done) => {
   console.log(`from serialise -> userId: ${user}`)
-  done(null, user.googlid);
+  done(null, user.googleid);
 });
 
 passport.deserializeUser(async (id, done) => {

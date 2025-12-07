@@ -27,14 +27,14 @@ app.use(
       secure: true, 
       sameSite: 'none', 
       maxAge: 1000 * 60 * 60 * 24,
-      domain: 'https://moviehub-7t2e.onrender.com', 
+      domain: 'https://moviehub-1-d78y.onrender.com', 
     }
   })
 );
 
 app.use(
   cors({
-    origin: 'https://moviehub-7t2e.onrender.com',
+    origin: 'https://moviehub-1-d78y.onrender.com',
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })

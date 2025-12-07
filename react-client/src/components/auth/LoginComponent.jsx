@@ -5,7 +5,7 @@ function LoginPage() {
 
   // Get the path the user was trying to access, from ProtectedRoute
   const from = location.state?.from?.pathname || '/';
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_API_BASE_URL || 'http://localhost:3000';
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_API_BASE_URL;
 
   // Construct the backend URL
   // We send the 'from' path as a query param so the backend can save it

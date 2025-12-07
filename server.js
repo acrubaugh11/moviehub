@@ -15,28 +15,28 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_BASE_URL,
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true,
-  })
-);
 
 app.use(
   session({
-    name: 'connect.sid',
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
     proxy: true,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: true, 
+      sameSite: 'none', 
       maxAge: 1000 * 60 * 60 * 24,
-      domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined
-    },
+      domain: 'moviehub-7t2e.onrender.com', 
+    }
+  })
+);
+
+app.use(
+  cors({
+    origin: 'moviehub-7t2e.onrender.com',
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
   })
 );
 

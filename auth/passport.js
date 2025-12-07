@@ -21,7 +21,7 @@ passport.use(new GoogleStrategy({
   if (!user) {
     user = await userModel.createNewUser(Object.values(newUser));
   }
-  return done(null, profile);
+  return done(null, user);
 }));
 
 
@@ -29,9 +29,9 @@ passport.serializeUser((user, done) => {
   done(null, user.googleId);
 });
 
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (googleId, done) => {
   try {
-    const user = await userModel.getUserByGoogleId(id); // Fetch from DB
+    const user = await userModel.getUserByGoogleId(googleId); // Fetch from DB
     done(null, user); // Pass the full user object
   } catch (error) {
     done(error);

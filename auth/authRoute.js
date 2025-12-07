@@ -67,7 +67,7 @@ router.get('/me', async (req, res) => {
     }
   } else {
     res.status(401).json({ message: 'Not authenticated' });
-    console.log(`req was not authenticated with req body = ${req.body} and req params = ${req.params}`);
+    console.log("req was not authenticated with req body =", req.body, "and req params =", req.params);
   }
 });
 

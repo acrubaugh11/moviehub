@@ -15,31 +15,30 @@ router.get(
   "/google",
   saveReturnTo,
   passport.authenticate("google", {
-    keepSessionInfo: true,
-    scope: [
-        "https://www.googleapis.com/auth/plus.login",
-        "https://www.googleapis.com/auth/userinfo.email",
-      ],
+    scope: ["profile", "email"],
   })
 );
+
 
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    scope: ['profile', 'email'],
+    failureRedirect: `${CLIENT_BASE_URL}/login?error=true`,
     keepSessionInfo: true,
-    failureRedirect: `${CLIENT_BASE_URL}/login?error=true`, // Redirect to login on failure
   }),
   (req, res) => {
-    // === SUCCESSFUL AUTHENTICATION ===
-    // 'req.returnTo' was saved in the session by our 'saveReturnTo' middleware
-    const returnTo = '/dashboard';
-    delete req.session.returnTo; // Clean up the session
 
-    // Redirect the user back to the frontend
+    console.log("google callback started");
+    console.log("Authenticated User:", req.user);
+
+    const returnTo = req.session.returnTo || "/dashboard";
+
+    delete req.session.returnTo;
+
     res.redirect(`${CLIENT_BASE_URL}${returnTo}`);
   }
 );
+
 
 router.get('/me', async (req, res) => {
   if (req.isAuthenticated()) {

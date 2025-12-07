@@ -31,8 +31,8 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (googleId, done) => {
   try {
-    const user = await userModel.getUserByGoogleId(googleId); // Fetch from DB
-    done(null, user); // Pass the full user object
+    const user = await userModel.getUserByGoogleId(googleId);
+    done(null, user);
   } catch (error) {
     done(error);
   }

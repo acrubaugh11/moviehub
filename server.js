@@ -55,11 +55,11 @@ const playlistRoutes = require("./routes/playlistRoutes.js");
 app.use("/playlists", playlistRoutes)
 
 // Serve the static files from the React app's build directory
-app.use(express.static(path.join(__dirname, 'react-client')));
+app.use(express.static(path.join(__dirname, 'react-client/dist')));
 
 // Direct all non-API requests to the React app's index.html
 app.get('/{*splat}', (req, res) => {
-  res.sendFile(path.join(__dirname, 'react-client', 'index.html'));
+  res.sendFile(path.join(__dirname, 'react-client/dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;

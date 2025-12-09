@@ -9,7 +9,6 @@ const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
 const pgSession = require("connect-pg-simple")(session);
-const isProd = process.env.NODE_ENV === 'production';
 
 app.set("trust proxy", 1);
 
@@ -62,7 +61,7 @@ app.get('/{*splat}', (req, res) => {
 });
 
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
   console.log("Server listening on port: " + PORT + "!");
 });

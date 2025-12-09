@@ -14,7 +14,7 @@ passport.use(new GoogleStrategy({
 
     if (!user) {
       const newUser = {
-        googleid: profile.id,
+        googleId: profile.id,
         displayname: profile.displayName,
         firstname: profile.name.givenName,
         lastname: profile.name.familyName,

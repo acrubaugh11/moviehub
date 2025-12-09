@@ -30,7 +30,7 @@ app.use(
 app.use(
   session({
     store: new pgSession({ conObject: { connectionString: process.env.DATABASE_URL } }),
-    secret: process.env.SECRET_KEY,
+    secret: process.env.MY_SECRET_KEY,
     resave: false,
     saveUninitialized: false,
     cookie: { secure: true, sameSite: "none", httpOnly: true },

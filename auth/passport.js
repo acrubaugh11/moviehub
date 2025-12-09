@@ -1,43 +1,63 @@
-require('dotenv').config();
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+require("dotenv").config();
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const userModel = require("../models/userModel");
 
-const userModel = require('../models/userModel');
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.SECRET_KEY,
+      callbackURL: `${process.env.VITE_BACKEND_API_BASE_URL}/auth/google/callback`,
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        const googleId = profile.id;
+        const email = profile.emails?.[0]?.value || null;
+        const firstName = profile.name?.givenName || null;
+        const lastName = profile.name?.familyName || null;
+        const displayName = profile.displayName || null;
 
-passport.use(new GoogleStrategy({
-  clientID: process.env.CLIENT_ID,
-  clientSecret: process.env.SECRET_KEY,
-  callbackURL: `${process.env.VITE_BACKEND_API_BASE_URL}/auth/google/callback`
-}, async (token, tokenSecret, profile, done) => {
+        if (!googleId) {
+          console.error("Missing Google profile.id");
+          return done(null, false);
+        }
 
-  const newUser = {
-    googleid: profile.id,
-    displayName: profile.displayName,
-    firstName: profile.name.givenName,
-    lastName: profile.name.familyName,
-    email: profile.emails[0].value
-  }
-  let user = await userModel.getUserByGoogleId(profile.id);
-  console.log(user);
-  if (!user) {
-    user = await userModel.createNewUser(Object.values(newUser));
-    console.log(user);
-  }
-  return done(null, user);
-}));
+        let user = await userModel.getUserByGoogleId(googleId);
 
+        if (!user) {
+          user = await userModel.createNewUser({
+            googleid: googleId,
+            email,
+            firstname: firstName,
+            lastname: lastName,
+            displayname: displayName,
+          });
+        }
 
+        return done(null, user);
+      } catch (err) {
+        return done(err, null);
+      }
+    }
+  )
+);
+
+// Serialize user
 passport.serializeUser((user, done) => {
-  console.log(`from serialise -> userId: ${user.googleid}`)
+  console.log("serializeUser:", user.googleid);
   done(null, user.googleid);
 });
 
-passport.deserializeUser(async (id, done) => {
+// Deserialize user
+passport.deserializeUser(async (googleid, done) => {
   try {
-    const user = await userModel.getUserByGoogleId(id); // Fetch from DB
-    console.log(`from deserialize -> user: ${user}`)
-    done(null, user); // Pass the full user object
-  } catch (error) {
-    done(error);
+    const user = await userModel.getUserByGoogleId(googleid);
+    console.log("deserializeUser:", user);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
   }
 });
+
+module.exports = passport;

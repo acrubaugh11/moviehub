@@ -29,7 +29,7 @@ export default function Home() {
         <div id='middle'>
             <Link
                 id='explore-movies'
-                to='/dashboard'>
+                to='/login'>
                 Explore Movies
             </Link>
         </div>

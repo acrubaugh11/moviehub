@@ -57,8 +57,8 @@ app.use("/playlists", playlistRoutes)
 app.use(express.static(path.join(__dirname, 'react-client/dist')));
 
 // Direct all non-API requests to the React app's index.html
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'react-client/dist', 'index.html'));
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.join(__dirname, 'react-frontend/dist', 'index.html'));
 });
 
 

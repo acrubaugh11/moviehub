@@ -54,7 +54,7 @@ router.get('/me', async (req, res) => {
   console.log("req.user:", req.user);
   console.log("req.cookies:", req.cookies);
   console.log(`\n the req session at /me = `, req.session, `\n the req body at /me = `, req.body);
-    const user = await userModel.getUserByGoogleId(req.user.googleId);
+    const user = await userModel.getUserByGoogleId(req.user.googleid);
     console.log(`user in .get/me is ${user}`);
     if (user) {
       console.log(`returning user!`);

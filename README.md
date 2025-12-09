@@ -4,6 +4,15 @@
 2. Head to react-client directory
 3. Run: npm install && npm run dev
 4. Head to most parent directory
+5. Create .env with variables:
+- DATABASE_URL=****
+- CLIENT_BASE_URL=http://localhost:5173 (or the port you are running your frontend on)
+- SECRET_KEY =(your google OAuth secred key)
+- CLIENT_ID =(your google OAuth client ID)
+- VITE_BACKEND_API_BASE_URL=http://localhost:3000
+- MY_SECRET_KEY=(your generated secret key for sessions)
+- TMDB_API_KEY = (your TMDB API Key)
+- TMDB_ACCESS_TOKEN = (your TMDB access token).
 5. Run: npm install && node --watch server.js
 
 - Deployed App URL: https://moviehub-7t2e.onrender.com

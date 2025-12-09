@@ -20,7 +20,7 @@ passport.use(new GoogleStrategy({
         lastname: profile.name.familyName,
         email: profile.emails[0].value
       };
-      user = await userModel.createNewUser(Object.values(newUser));
+      user = await userModel.createNewUser(newUser);
     }
 
     req.logIn(user, (err) => {

@@ -11,6 +11,7 @@ const passport = require("passport");
 const pgSession = require("connect-pg-simple")(session);
 const isProd = process.env.NODE_ENV === 'production';
 
+app.set("trust proxy", 1);
 
 require('./auth/passport'); 
 
@@ -18,6 +19,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
+app.use(
+  cors({
+    origin: process.env.CLIENT_BASE_URL,
+    credentials: true,
+  })
+);
 
 
 app.use(
@@ -26,7 +33,7 @@ app.use(
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true, sameSite: 'lax', httpOnly: true },
+    cookie: { secure: true, sameSite: "none", httpOnly: true },
   })
 );
 

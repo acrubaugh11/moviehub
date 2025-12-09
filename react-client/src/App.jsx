@@ -24,12 +24,10 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route element={<ProtectedLayout />}>
             <Route path="/explore" element={<Explore />} />
             <Route path="/create" element={<Create />} />
             <Route path='/playlists/:id' element={<PlaylistItem />}/>
             <Route path='/movies/:id' element={<MovieItem/>}/>
-          </Route>
         </Routes>
       </Router>
     </AuthProvider>

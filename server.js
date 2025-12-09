@@ -46,18 +46,12 @@ app.use("/api", movieRoutes);
 const playlistRoutes = require("./routes/playlistRoutes.js");
 app.use("/playlists", playlistRoutes)
 
-app.use(express.static(path.join(__dirname, "react-client/dist")));
+// Serve the static files from the React app's build directory
+app.use(express.static(path.join(__dirname, 'react-client/dist')));
 
-app.get("*", (req, res, next) => {
-  if (req.path.startsWith("/auth") || 
-      req.path.startsWith("/api") ||
-      req.path.startsWith("/movies") ||
-      req.path.startsWith("/playlists") ||
-      req.path.startsWith("/uploads")
-    ) {
-    return next();
-  }
-  res.sendFile(path.join(__dirname, "react-client/dist", "index.html"));
+// Direct all non-API requests to the React app's index.html
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.join(__dirname, 'react-client/dist', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;

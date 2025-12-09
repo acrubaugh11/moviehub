@@ -54,7 +54,6 @@ router.get('/me', async (req, res) => {
   console.log("req.user:", req.user);
   console.log("req.cookies:", req.cookies);
   console.log(`\n the req session at /me = `, req.session, `\n the req body at /me = `, req.body);
-  if (req.isAuthenticated()) {
     const user = await userModel.getUserByGoogleId(req.user.googleId);
     console.log(`user in .get/me is ${user}`);
     if (user) {
@@ -63,10 +62,6 @@ router.get('/me', async (req, res) => {
     } else {
       res.status(404).json({ message: 'User not found' });
     }
-  } else {
-    res.status(401).json({ message: 'Not authenticated' });
-    console.log("req was not authenticated with req body =", req.body, "and req params =", req.params);
-  }
 });
 
 router.post('/logout', (req, res) => {

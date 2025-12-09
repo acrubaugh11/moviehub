@@ -16,10 +16,7 @@ router.get(
   saveReturnTo,
   passport.authenticate("google", {
     keepSessionInfo: true,
-    scope: [
-        "https://www.googleapis.com/auth/plus.login",
-        "https://www.googleapis.com/auth/userinfo.email",
-      ],
+    scope: ["profile", "email"],
   })
 );
 
@@ -53,16 +50,25 @@ router.get('/me', async (req, res) => {
   console.log("req.session.passport:", req.session.passport);
   console.log("req.user:", req.user);
   console.log("req.cookies:", req.cookies);
-  console.log(`\n the req session at /me = `, req.session, `\n the req body at /me = `, req.body);
+
+  if (!req.user) {
+    return res.status(401).json({ message: "Not authenticated" });
+  }
+
+  try {
     const user = await userModel.getUserByGoogleId(req.user.googleid);
-    console.log(`user in .get/me is ${user}`);
-    if (user) {
-      console.log(`returning user!`);
-      res.json(user);
-    } else {
-      res.status(404).json({ message: 'User not found' });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
+
+    return res.json({ user });
+  } catch (err) {
+    console.error("Error in /me:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
 });
+
 
 router.post('/logout', (req, res) => {
   req.logout((err) => {

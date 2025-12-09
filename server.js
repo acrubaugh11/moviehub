@@ -18,15 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use(
-  cors({
-    origin: isProd
-    ? 'https://moviehub-llh9.vercel.app' 
-    : 'http://localhost:5173',        
-    methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-    credentials: true,
-  })
-);
+
 
 app.use(
   session({
@@ -34,7 +26,7 @@ app.use(
     secret: process.env.SECRET_KEY,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false, sameSite: 'none', httpOnly: true },
+    cookie: { secure: true, sameSite: 'lax', httpOnly: true },
   })
 );
 
@@ -54,12 +46,18 @@ app.use("/api", movieRoutes);
 const playlistRoutes = require("./routes/playlistRoutes.js");
 app.use("/playlists", playlistRoutes)
 
-// Serve the static files from the React app's build directory
-app.use(express.static(path.join(__dirname, 'react-client/dist')));
+app.use(express.static(path.join(__dirname, "react-client/dist")));
 
-// Direct all non-API requests to the React app's index.html
-app.get('/{*splat}', (req, res) => {
-  res.sendFile(path.join(__dirname, 'react-client/dist', 'index.html'));
+app.get("*", (req, res, next) => {
+  if (req.path.startsWith("/auth") || 
+      req.path.startsWith("/api") ||
+      req.path.startsWith("/movies") ||
+      req.path.startsWith("/playlists") ||
+      req.path.startsWith("/uploads")
+    ) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, "react-client/dist", "index.html"));
 });
 
 const PORT = process.env.PORT || 3000;

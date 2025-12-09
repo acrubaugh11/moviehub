@@ -3,45 +3,36 @@ const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const userModel = require("../models/userModel");
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.CLIENT_ID,
-      clientSecret: process.env.SECRET_KEY,
-      callbackURL: `${process.env.VITE_BACKEND_API_BASE_URL}/auth/google/callback`,
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      try {
-        const googleId = profile.id;
-        const email = profile.emails?.[0]?.value || null;
-        const firstName = profile.name?.givenName || null;
-        const lastName = profile.name?.familyName || null;
-        const displayName = profile.displayName || null;
+passport.use(new GoogleStrategy({
+  clientID: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  callbackURL: `${process.env.VITE_BACKEND_API_BASE_URL}/auth/google/callback`,
+  passReqToCallback: true
+}, async (req, accessToken, refreshToken, profile, done) => {
+  try {
+    let user = await userModel.getUserByGoogleId(profile.id);
 
-        if (!googleId) {
-          console.error("Missing Google profile.id");
-          return done(null, false);
-        }
-
-        let user = await userModel.getUserByGoogleId(googleId);
-
-        if (!user) {
-          user = await userModel.createNewUser({
-            googleid: googleId,
-            email,
-            firstname: firstName,
-            lastname: lastName,
-            displayname: displayName,
-          });
-        }
-
-        return done(null, user);
-      } catch (err) {
-        return done(err, null);
-      }
+    if (!user) {
+      const newUser = {
+        googleid: profile.id,
+        displayname: profile.displayName,
+        firstname: profile.name.givenName,
+        lastname: profile.name.familyName,
+        email: profile.emails[0].value
+      };
+      user = await userModel.createNewUser(Object.values(newUser));
     }
-  )
-);
+
+    req.logIn(user, (err) => {
+      if (err) return done(err);
+      return done(null, user);
+    });
+
+  } catch (err) {
+    done(err);
+  }
+}));
+
 
 // Serialize user
 passport.serializeUser((user, done) => {

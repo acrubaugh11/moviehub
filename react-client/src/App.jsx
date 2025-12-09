@@ -23,11 +23,10 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/create" element={<Create />} />
-            <Route path='/playlists/:id' element={<PlaylistItem />}/>
-            <Route path='/movies/:id' element={<MovieItem/>}/>
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/create" element={<Create />} />
+          <Route path='/playlists/:id' element={<PlaylistItem />}/>
+          <Route path='/movies/:id' element={<MovieItem/>}/>
         </Routes>
       </Router>
     </AuthProvider>

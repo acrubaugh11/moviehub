@@ -3,9 +3,7 @@ const model = require('../models/playlistModel');
 const axios = require("axios");
 
 async function fetchMyPlaylists(req, res) {
-    if (!req.isAuthenticated()) {
-        return res.status(401).json({ message: "Not authenticated" });
-    }
+
     const userId = req.user.id;
 
     try{
@@ -20,9 +18,7 @@ async function fetchMyPlaylists(req, res) {
 };
 
 async function fetchPlaylistById(req, res) {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ message: "Not authenticated" });
-  }
+
   const playlistId = req.params.id;
   try{
     const playlistById = await model.getPlaylistById(playlistId);
@@ -35,9 +31,7 @@ async function fetchPlaylistById(req, res) {
 }
 
 async function createPlaylist(req, res) {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
+
   
     const userId = req.user.id;
     const { name, description } = req.body;
@@ -56,9 +50,7 @@ async function createPlaylist(req, res) {
   }
 
   async function deleteMyPlaylist(req, res) {
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
+
 
     const playlistId = req.params.id;
     try{
@@ -71,9 +63,7 @@ async function createPlaylist(req, res) {
   }
 
   async function addMovieToPlaylist(req, res){
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
+
     const {playlistId, movieId} = req.params;
     try{
       const result = await model.addToPlaylist(playlistId, movieId);
@@ -85,9 +75,7 @@ async function createPlaylist(req, res) {
   }
 
   async function fetchPlaylistMoviesID(req, res){
-    if (!req.isAuthenticated()) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
+
     const {playlistId} = req.params;
     try {
       const result = await model.getPlaylistMovies(playlistId);
